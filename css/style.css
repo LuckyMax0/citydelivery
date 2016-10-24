@@ -35,6 +35,11 @@ body {
     font-family: 'Roboto Condensed', sans-serif;
 }
 
+a{
+  text-decoration: none;
+  color: #757575;
+}
+
 input {
     font-size: 18px;
     padding: 10px 10px 10px 5px;
@@ -78,6 +83,16 @@ label {
 
 #container {
     background-color: #D6D6D6;
+}
+
+#register_popup{
+  position : absolute;
+  width: 70vw;
+  height: 70vh;
+  top: 15vw;
+  left: 15vw;
+  background-color: #FFFFFF;
+  z-index: -99999;
 }
 
 #login_popup{
@@ -482,7 +497,45 @@ header {
       margin-top:0;
       margin-bottom:20px;
       width: 45vw;
+    }
 
+    #manual_location{
+      left: 8vw;
+      width: 82vw;
+      padding:1vw;
+      height: 60vh;
+      top: 20vh;
+    }
+
+    #manual_location>form>.submit_btn{
+      width: 45vw;
+    }
+
+    #manual_location>form>input:first-child{
+      width:60vw !important;
+    }
+
+    #login_popup{
+      width: 82vw;
+      left: 8vw;
+      height: 80vh;
+      top: 10vh;
+      padding : 1vw;
+    }
+
+    #login_popup>form{
+      width: 80vw;
+    }
+
+    #login_popup>form>.form_group{
+      margin-right: 0;
+    }
+
+    #login_popup>form>.form_group>input{
+      width:80%;
+    }
+    #login_popup>form>.submit_btn{
+      width:50%;
     }
 }
 
@@ -499,6 +552,23 @@ header {
         height: 92vh;
         left: 0;
         top: 8vh;
+    }
+
+    #manual_location{
+      left: 0vw;
+      width: 100vw;
+      padding:0vw;
+      height: 100vh;
+      top: 0vh;
+      border-radius: 0;
+    }
+
+    #manual_location>form{
+      margin-top: 12.5vh;
+    }
+
+    #manual_location>form>.submit_btn{
+      margin-top: 12.5vh !important;
     }
 }
 

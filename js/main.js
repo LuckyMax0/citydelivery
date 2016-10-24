@@ -18,11 +18,12 @@ function numberToRoman(int) {
 function timestampToDate(timestamp) {
     var date = new Date(timestamp * 1000);
     var day = date.getDate();
-    var month = date.getMonth();
-    month = numberToRoman(month);
+    var month = date.getMonth() + 1;
+    //month = numberToRoman(month);
+	var year = date.getFullYear();
     var hours = date.getHours();
     var minutes = "0" + date.getMinutes();
-    var formattedTime = day + '.' + month + ' ' + hours + ':' + minutes.substr(-2);
+    var formattedTime = day + '.' + month + '.' + year + ' ' + hours + ':' + minutes.substr(-2);
     return formattedTime
 }
 
@@ -89,6 +90,10 @@ function manualCitySubmit(e) {
             return;
         }
     })
+}
+
+function registerPopup(){
+    console.log("TWOJA MAMA")
 }
 
 function showLocationPopup() {
@@ -233,16 +238,22 @@ function initializePackagesPoints(packages, map) {
         var startPoint = package.startPoint;
         var endPoint = package.endPoint;
         var distanceToStartPoint = package.distance.toString();
-        distanceToStartPoint = distanceToStartPoint.substr(0, 4) + 'km'
-        var row = `<li class="city_list_row" meta-start-point="${startPoint}" meta-end-point="${endPoint}" data-id="${id}">
+        distanceToStartPoint = distanceToStartPoint.substr(0, 4) + ' [km]'
+        var row1 = `<li class="city_list_row" meta-start-point="${startPoint}" meta-end-point="${endPoint}" data-id="${id}">
                     <div class="city_list_elem_container">
                       <div class='city_list_elem_title'><div>${startplace} \&#8594; ${endplace}</div></div class='city_list_elem_title'>
-                      <div class='city_list_elem_info'><div class="single_info">Rozmiar: ${size}</div><div class="single_info">Odległość od nadawcy: ${distanceToStartPoint}</div><div class="single_info">Masa: ${mass}</div><div class="single_info" title="Preferowany Czas Nadania">PCN: ${pst}</div></div>
-                    </div>
-                    <div class='getDelivery'><i class="material-icons">add</i></div>
-
-                    </li>`;
-        packagesList = packagesList.concat(row);
+                      <div class='city_list_elem_info'><div class="single_info">Rozmiar: ${size} [cm]</div><div class="single_info">Odległość od nadawcy: ${distanceToStartPoint}</div><div class="single_info">Masa: ${mass} [kg]</div><div class="single_info" title="Preferowany Czas Nadania">PCN: ${pst}</div></div>
+		</div>`;
+		if(typeof userid !== 'undefined' && userid > 0)
+		{
+		var row2 = `<div class='getDelivery'><i class="material-icons">add</i></div></li>`;
+		}
+		else
+		{
+		var row2 = `</li>`;
+		}
+		var row = row1.concat(row2)
+		packagesList = packagesList.concat(row);
     })
     card.innerHTML = packagesList;
     $('.city_list_elem_container').click(refreshMap);
@@ -288,7 +299,7 @@ function refreshMap() {
 
 function getCityPackages(position, map) {
     $.ajax({
-        url: "http://164.132.196.156:3030/getCityPackages",
+        url: "http://domena.aa:3030/getCityPackages",
         method: "POST",
         data: {
             "location": position
@@ -316,4 +327,5 @@ function getCityPackages(position, map) {
     $('#under_menu_fadeout').click(toggleNav);
     $('#setLocation').click(showLocationPopup);
     $('#login').click(loginPopup);
+    $('#register').click(registerPopup);
 })()

@@ -1,9 +1,9 @@
 <?php
 
-$config['db']['host'] = 'localhost';
-$config['db']['user'] = 'admin_cityadmin';
-$config['db']['password'] = 'HmbbGgCDmU';
-$config['db']['database'] = 'admin_cityd';
+$config['db']['host'] = 'host';
+$config['db']['user'] = 'user';
+$config['db']['password'] = 'password';
+$config['db']['database'] = 'db_name';
 
 function geocode($address)
 {

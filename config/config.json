@@ -1,6 +1,6 @@
 {
-  "dbHost":"localhost",
-  "dbName":"admin_cityd",
-  "dbUser":"admin_cityadmin",
-  "dbPassword":"HmbbGgCDmU"
+  "dbHost":"host",
+  "dbName":"name",
+  "dbUser":"user",
+  "dbPassword":"password"
 }

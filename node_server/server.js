@@ -8,6 +8,10 @@ var app = express();
 var map = require('./maps_functions.js');
 var sortlib = require('./sorting_functions.js')
 
+var log = require('simple-node-logger').createSimpleLogger('project.log');var log = require('simple-node-logger').createSimpleLogger('project.log');var log = require('simple-node-logger').createSimpleLogger('project.log');
+
+log.info("Server starting!!!");
+
 app.use(cors());
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
@@ -40,10 +44,16 @@ app.post('/getCityPackages', function(req, res) {
             var packageLatLng = package.start_latlng;
             var targetLatLng = package.end_latlng;
             packageLatLng = packageLatLng.split(',');
+			targetLatLng = targetLatLng.split(',');
             var startCoords = {lat : packageLatLng[0],lng : packageLatLng[1]}; //!!!!!!! MUSI BYĆ OBLICZANE PRZY REJESTRACJI
-            var meters = map.calculateDistance(userCoords,startCoords);
+			var endCoords = {lat : targetLatLng[0],lng : targetLatLng[1]};
+            var meters = map.calculateDistance(endCoords,startCoords);
             var startAddress = package.start_address;
+			var startCity = package.start_city;
+			var startZipcode = package.start_zipcode;
             var endAddress = package.end_address;
+			var endCity = package.end_city;
+			var endZipcode = package.end_zipcode;
             var pst = package.prefered_send_time;
             var dimensions = package.dimensions;
             var mass = package.mass;
@@ -55,7 +65,11 @@ app.post('/getCityPackages', function(req, res) {
               "startPoint" : packageLatLng,
               "endPoint" : targetLatLng,
               "startAddress" : startAddress,
+			  "startCity" : startCity,
+			  "startZipcode" : startZipcode,
               "endAddress" : endAddress,
+			  "endCity" : endCity,
+			  "endZipcode" : endZipcode,
               "preferedSendTime" : pst,
               "dimensions" : dimensions,
               "mass" : mass,

@@ -18,10 +18,21 @@ session_start();
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700&amp;subset=latin-ext" rel="stylesheet">
+	<?php
+	if ($_SESSION['logged'] == true) {
+	    ?>
+	<script type="text/javascript">
+	<?php
+	$userid = $_SESSION['id'];
+	echo 'var userid = '. json_encode($userid) .';';
+	?>
+	</script>
+	<?php
+}
+	?>
 </head>
 
 <body>
-
     <div id="container">
         <div id="add_delivery_fadeout" class="fadeout"></div>
         <div id="under_menu_fadeout" class="fadeout"></div>
@@ -50,7 +61,9 @@ if ($_SESSION['logged'] != true) {
 
 }
  ?>
-
+        <div id="register_popup">
+          LOLO
+        </div>
         <div id="manual_location" class="popup_hidden_down">
           <h1>Gdzie jesteś?</h1>
           <p>Proszę, wprowadź nazwę miasta oraz województwa w którym się znajdujesz, abyśmy mogli wyświetlić Ci listę paczek znajdujących się w pobliżu.</p>
@@ -140,7 +153,7 @@ if ($_SESSION['logged'] != true) {
                     <?php
                     if ($_SESSION['logged'] == true) {
                         ?>
-                    <li id="addPackage"><img src="img/box1.svg">Nadaj paczkę</li>
+                    <li id="addPackage"><img src="img/box1.svg" width="18px">Nadaj paczkę</li>
 <?php
                     }
  ?>
@@ -148,15 +161,15 @@ if ($_SESSION['logged'] != true) {
                     <?php
                     if ($_SESSION['logged'] != true) {
                         ?>
-                    <li id="login">Zaloguj się</li>
+                    <li id="login"><img src="img/unlock.svg" width="18px">Zaloguj się</li>
                     <?php
                                         }
                      ?>
-                    <li>Opcja 4</li>
+                    <li id="register"><img src="img/add_circle.svg" width="18px">Załóż konto</li>
                     <?php
                     if ($_SESSION['logged'] == TRUE) {
                         ?>
-                    <li><a href="logout.php">Wyloguj się</a></li>
+                    <li><img src="img/lock.svg" width="18px"><a href="logout.php">Wyloguj się</a></li>
                     <?php
                 } ?>
                 </ul>
@@ -193,7 +206,61 @@ if ($_SESSION['logged'] != true) {
                         <span>Paczki użytkownika</span>
                     </div>
                     <div class="card_body">
-
+                        <?php
+                        if (isset($_SESSION['id']) && $_SESSION['logged'] == TRUE) {
+                            if (file_exists('dbconfig.php')) {
+                                // Dane logowania do bazy
+                            require_once 'dbconfig.php';
+                            // Schemat łączenia z bazą
+                            $mysqli = new mysqli($config['db']['host'], $config['db']['user'], $config['db']['password'], $config['db']['database']);
+                            // Sprawdzanie połączenia
+                            if ($mysqli->connect_error) {
+                                echo 'Problem z połączeniem - '.$mysqli->connect_error.'['.$mysqli->connect_errno.']';
+                            } else {
+								$mysqli->set_charset("utf8");
+                                $userid = $_SESSION['id'];
+                                $result = $mysqli->query("SELECT * FROM `packages` WHERE senderid = '$userid' OR receiverid = '$userid' OR transporterid = '$userid' ORDER BY add_time DESC");
+                                if ($result->num_rows > 0) {
+                                    foreach ($result as $res):
+										$start_latlng = $res['start_latlng'];
+										$end_latlng = $res['end_latlng'];
+										$id = $res['id'];
+										echo '<li class="city_list_row" meta-start-point="'. $start_latlng .'" meta-end-point="'. $end_latlng .'" data-id="'. $id .'">';
+										echo '<div class="city_list_elem_container">';
+										if($res['senderid'] == $userid)
+										{
+											$mystatus = 'Wysłana przeze mnie';
+										}
+										elseif($res['receiverid'] == $userid)
+										{
+											$mystatus = 'Wysłana do mnie';
+										}
+										elseif($res['transporterid'] == $userid)
+										{
+											$mystatus = 'Transportowana przeze mnie';
+										}
+										$startaddress = $res['start_address'];
+										$startcity = $res['start_city'];
+										$startzipcode = $res['start_zipcode'];
+										$endaddress = $res['end_address'];
+										$endcity = $res['end_city'];
+										$endzipcode = $res['end_zipcode'];										
+                                        echo '<div class="city_list_elem_title""><div>'. $startaddress .', '. $startzipcode .' '. $startcity .' → '. $endaddress .', '. $endzipcode .' '. $endcity .'</div></div>';
+										$size = $res['dimensions'];
+										$mass = $res['mass'];
+										$pcn = date("j.m.Y, H:i", $res['prefered_send_time']);
+                						echo '<div class="city_list_elem_info"><div class="single_info">Rozmiar: '. $size .' [cm]</div><div class="single_info">Masa: '. $mass .' [kg]</div><div class="single_info" title="Preferowany Czas Nadania">PCN: '. $pcn .' </div><div class="single_info" title="Mój udział">'. $mystatus .'</div></div></div>';
+										if($res['delivery_time'] != NULL && $res['delivery_time'] > 0)
+										{
+                    					echo '<div title="dostarczona" class="getDelivery"><i class="material-icons">check</i></div>';
+										}
+										echo '</li>';
+                                    endforeach;
+                                }
+                            }
+                            }
+                        }
+                         ?>
                     </div>
                 </div>
             </div>

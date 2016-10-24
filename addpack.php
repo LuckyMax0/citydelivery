@@ -75,14 +75,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST) && isset($_SESSION['lo
                     $end_lat = $end[0];
                     $end_lon = $end[1];
                     $end_latlng = ''. $end_lat .','. $end_lon .'';
-
+					//Aktualny czas
+					$aktualnyczas = time();
+					//Preferowana data wysylki
+					$splitdate = explode("T", $prefered_send_time);
+					$splitdata = explode("-", $splitdate[0]);
+					print_r($splitdata);
+					$splittime = explode(":", $splitdate[1]);
+					print_r($splittime);
+					$splittimestamp = mktime($splittime[0],$splittime[1],0,$splitdata[1],$splitdata[2],$splitdata[0]);
                     // Wysłanie do bazy
-                    $stmt = $mysqli->prepare("INSERT INTO `packages` (`id`, `senderid`, `start_address`, `start_city`, `start_zipcode`, `start_latlng`, `receiverid`, `end_address`, `end_city`, `end_zipcode`, `end_latlng`, `prefered_send_time`, `dimensions`, `mass`, `add_time`, `delivery_confirmation_code`) VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now(), ?)");
-                    $stmt->bind_param('issssissssisis', $senderid, $start_address, $start_city, $start_zipcode, $start_latlng, $receiverid, $end_address, $end_city, $end_zipcode, $end_latlng, $prefered_send_time, $dimensions, $mass, $receivecode);
+                    $stmt = $mysqli->prepare("INSERT INTO `packages` (`id`, `senderid`, `start_address`, `start_city`, `start_zipcode`, `start_latlng`, `receiverid`, `end_address`, `end_city`, `end_zipcode`, `end_latlng`, `prefered_send_time`, `dimensions`, `mass`, `add_time`, `delivery_confirmation_code`) VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    $stmt->bind_param('issssissssisiss', $senderid, $start_address, $start_city, $start_zipcode, $start_latlng, $receiverid, $end_address, $end_city, $end_zipcode, $end_latlng, $splittimestamp, $dimensions, $mass, $aktualnyczas, $receivecode);
                     $stmt->execute();
 
                     if ($stmt->affected_rows == 1) {
                         echo 'Przesyłka dodana pomyślnie';
+						header('Location: index.php');
                     } else {
                         echo 'Błąd podczas dodawania przesyłki!';
                         printf("Error: %s.\n", $stmt->error);

@@ -5,10 +5,11 @@ session_start();
         if(session_destroy())
 		{
             echo 'Wylogowano';
+            header('Location: index.php');
         }
     }
 	else
 	{
-        echo 'Nie jesteś zalogowany. Przejdź do <a href="login.php">Formularza logowania</a>.';
+        echo 'Nie jesteś zalogowany. Przejdź do <a href="index.php">Formularza logowania</a>.';
     }
 ?>

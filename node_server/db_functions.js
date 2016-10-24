@@ -11,7 +11,7 @@ var pool = mysql.createPool({
 
 
 function getCityPackages(city,callback) {
-  pool.query('SELECT * FROM packages WHERE start_city=?',[city],callback);
+  pool.query('SELECT * FROM `packages` WHERE (transporterid IS NULL) AND (start_city=?)',[city],callback);
 }
 
 module.exports = {
