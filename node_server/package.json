@@ -1,0 +1,24 @@
+{
+  "name": "city_deploy_packages_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Maksymilian Tomczyk",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "cors": "^2.8.1",
+    "express": "^4.14.0",
+    "fs": "0.0.1-security",
+    "google-distance": "^1.0.1",
+    "https": "^1.0.0",
+    "mysql": "^2.11.1",
+    "node-geocoder": "^3.15.1",
+    "request": "^2.75.0",
+    "socketio": "^1.0.0"
+  }
+}
