@@ -1,6 +1,13 @@
 # citydelivery
 
 Dane do logowania:
+
+kONTO LOKALNE:
+Login: max
+Hasło: tomczyk
+
+Konta na cityd.mj2.pl
+
 Konto1:
 Login: test
 Hasło: test
